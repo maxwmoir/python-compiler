@@ -1,6 +1,6 @@
 
 y := 0;
-if not not x = 1 then
+if x =2 then
   x := 2
 end;
 x := 0

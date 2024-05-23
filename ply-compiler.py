@@ -238,7 +238,6 @@ class If_Else_AST:
                self.condition.indented(level+1) + \
                self.then.indented(level+1) + \
                self.other.indented(level+1)
-    #TODO code
     def code(self):
         l1 = label_generator.next()
         l2 = label_generator.next()
@@ -339,33 +338,33 @@ class Comparison_AST:
                self.right.code() + \
                op[self.op] + ' ' + label + '\n'
 
-# class Boolean_Expression_AST():
-#     def __init__(self, left, op = None, right=None):
-#         self.left = left
-#         self.op = op
-#         self.right = right
-#     def indented(self, level):
-#         if self.op is None:
-#             return indent(self.op, level) + \
-#                 self.left.indented(level+1)
-#         else:
-#             return indent(self.op, level) + \
-#                 self.left.indented(level+1) + \
-#                 self.right.indented(level+1)    
+class Boolean_Expression_AST():
+    def __init__(self, left, op = None, right=None):
+        self.left = left
+        self.op = op
+        self.right = right
+    def indented(self, level):
+        if self.op is None:
+            return indent(self.op, level) + \
+                self.left.indented(level+1)
+        else:
+            return indent(self.op, level) + \
+                self.left.indented(level+1) + \
+                self.right.indented(level+1)    
 
-# class Boolean_Term_AST():
-#     def __init__(self, left, op = None, right = None):
-#         self.left = left
-#         self.op = op
-#         self.right = right
-#     def indented(self, level):
-#         if self.op is None:
-#             return indent(self.op, level) + \
-#                 self.left.indented(level+1)
-#         else:
-#             return indent(self.op, level) + \
-#                 self.left.indented(level+1) + \
-#                 self.right.indented(level+1)    
+class Boolean_Term_AST():
+    def __init__(self, left, op = None, right = None):
+        self.left = left
+        self.op = op
+        self.right = right
+    def indented(self, level):
+        if self.op is None:
+            return indent(self.op, level) + \
+                self.left.indented(level+1)
+        else:
+            return indent(self.op, level) + \
+                self.left.indented(level+1) + \
+                self.right.indented(level+1)    
 
 class Boolean_Factor_AST():
     def __init__(self, left, right = None):
@@ -379,6 +378,11 @@ class Boolean_Factor_AST():
                    self.right.indented(level + 1)
         else:
             return self.left.indented(level)
+    def code(self):
+        if self.right is not None:
+            return self.left.code()
+        else:
+            return self.left.code()
     
 class Expression_AST:
     def __init__(self, left, op, right):
@@ -476,8 +480,8 @@ def p_statement(p):
     p[0] = p[1]
 
 def p_if(p):
-    '''If : IF BooleanFactor THEN Statements END
-          | IF BooleanFactor THEN Statements ELSE Statements END'''
+    '''If : IF BooleanExpression THEN Statements END
+          | IF BooleanExpression THEN Statements ELSE Statements END'''
     if p[5] == 'end':
         p[0] = If_AST(p[2], p[4])
     else:
@@ -492,7 +496,7 @@ def p_read(p):
     p[0] = Read_AST(p[2])
 
 def p_while(p):
-    'While : WHILE BooleanFactor DO Statements END'
+    'While : WHILE BooleanExpression DO Statements END'
     p[0] = While_AST(p[2], p[4])
 
 def p_assignment(p):
@@ -502,21 +506,21 @@ def p_assignment(p):
 
 ######################################### CHANGES
 
-# def p_boolean_expression(p):
-#     '''BooleanExpression : BooleanTerm
-#                          | BooleanTerm OR BooleanExpression'''
-#     if p[2] == 'or':
-#         p[0] = Boolean_Expression_AST(p[1], p[2], p[3])
-#     else:
-#         p[0] = Boolean_Expression_AST(p[1])
+def p_boolean_expression(p):
+    '''BooleanExpression : BooleanTerm
+                         | BooleanTerm OR BooleanExpression'''
+    if len(p) > 2:
+        p[0] = Boolean_Expression_AST(p[1], p[2], p[3])
+    else:
+        p[0] = p[1]
 
-# def p_boolean_term(p):
-#     '''BooleanTerm : BooleanFactor
-#                    | BooleanFactor AND BooleanTerm'''
-#     if p[2] == 'and':
-#         p[0] = Boolean_Term_AST(p[1], p[2], p[3])
-#     else:
-#         p[0] = Boolean_Term_AST(p[1])
+def p_boolean_term(p):
+    '''BooleanTerm : BooleanFactor
+                   | BooleanFactor AND BooleanTerm'''
+    if len(p) > 2:
+        p[0] = Boolean_Term_AST(p[1], p[2], p[3])
+    else:
+        p[0] = p[1]
 
 def p_boolean_factor(p):
     '''BooleanFactor : Comparison

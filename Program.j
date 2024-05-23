@@ -3,11 +3,9 @@ Statements
         y
         0
     If
-        NOT
-            NOT
-                =
-                    x
-                    1
+        =
+            x
+            2
         Statements
             Assign
                 x
