@@ -378,7 +378,7 @@ class Boolean_Factor_AST():
             return indent("NOT", level) +\
                    self.right.indented(level + 1)
         else:
-            return indent("AND", level)
+            return self.left.indented(level)
     
 class Expression_AST:
     def __init__(self, left, op, right):
@@ -477,7 +477,7 @@ def p_statement(p):
 
 def p_if(p):
     '''If : IF BooleanFactor THEN Statements END
-          | IF Comparison THEN Statements ELSE Statements END'''
+          | IF BooleanFactor THEN Statements ELSE Statements END'''
     if p[5] == 'end':
         p[0] = If_AST(p[2], p[4])
     else:
@@ -492,16 +492,13 @@ def p_read(p):
     p[0] = Read_AST(p[2])
 
 def p_while(p):
-    'While : WHILE Comparison DO Statements END'
+    'While : WHILE BooleanFactor DO Statements END'
     p[0] = While_AST(p[2], p[4])
 
 def p_assignment(p):
     'Assignment : Id BEC Expression'
     p[0] = Assign_AST(p[1], p[3])
 
-def p_comparison(p):
-    'Comparison : Expression Relation Expression'
-    p[0] = Comparison_AST(p[1], p[2], p[3])
 
 ######################################### CHANGES
 
@@ -522,15 +519,20 @@ def p_comparison(p):
 #         p[0] = Boolean_Term_AST(p[1])
 
 def p_boolean_factor(p):
-    '''BooleanFactor : AND
-                     | NOT Comparison'''
-    if p[1] == 'and':
-        p[0] = Boolean_Factor_AST(p[1])
-    else:
+    '''BooleanFactor : Comparison
+                     | NOT BooleanFactor'''
+    if p[1] == 'not':
         p[0] = Boolean_Factor_AST(p[1], p[2])
+    else:
+        p[0] = p[1]
 
 
 #############################################Changes
+
+def p_comparison(p):
+    'Comparison : Expression Relation Expression'
+    p[0] = Comparison_AST(p[1], p[2], p[3])
+
 def p_relation(p):
     '''Relation : EQ
                 | NEQ

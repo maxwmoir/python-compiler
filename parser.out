@@ -2,6 +2,7 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
+    AND
     OR
 
 Grammar
@@ -16,14 +17,14 @@ Rule 6     Statement -> Assignment
 Rule 7     Statement -> Read
 Rule 8     Statement -> Write
 Rule 9     If -> IF BooleanFactor THEN Statements END
-Rule 10    If -> IF Comparison THEN Statements ELSE Statements END
+Rule 10    If -> IF BooleanFactor THEN Statements ELSE Statements END
 Rule 11    Write -> WRITE Expression
 Rule 12    Read -> READ Id
-Rule 13    While -> WHILE Comparison DO Statements END
+Rule 13    While -> WHILE BooleanFactor DO Statements END
 Rule 14    Assignment -> Id BEC Expression
-Rule 15    Comparison -> Expression Relation Expression
-Rule 16    BooleanFactor -> AND
-Rule 17    BooleanFactor -> NOT Comparison
+Rule 15    BooleanFactor -> Comparison
+Rule 16    BooleanFactor -> NOT BooleanFactor
+Rule 17    Comparison -> Expression Relation Expression
 Rule 18    Relation -> EQ
 Rule 19    Relation -> NEQ
 Rule 20    Relation -> LESS
@@ -42,7 +43,7 @@ Rule 31    Id -> ID
 Terminals, with rules where they appear
 
 ADD                  : 24
-AND                  : 16
+AND                  : 
 BEC                  : 14
 DIV                  : 27
 DO                   : 13
@@ -58,7 +59,7 @@ LESS                 : 20
 LPAR                 : 28
 MUL                  : 26
 NEQ                  : 19
-NOT                  : 17
+NOT                  : 16
 NUM                  : 29
 OR                   : 
 READ                 : 12
@@ -73,14 +74,14 @@ error                :
 Nonterminals, with rules where they appear
 
 Assignment           : 6
-BooleanFactor        : 9
-Comparison           : 10 13 17
-Expression           : 11 14 15 15 24 24 25 25 26 26 27 27 28
+BooleanFactor        : 9 10 13 16
+Comparison           : 15
+Expression           : 11 14 17 17 24 24 25 25 26 26 27 27 28
 Id                   : 12 14 30
 If                   : 4
 Program              : 0
 Read                 : 7
-Relation             : 15
+Relation             : 17
 Statement            : 2 3
 Statements           : 1 3 9 10 10 13
 While                : 5
@@ -100,8 +101,8 @@ state 0
     (7) Statement -> . Read
     (8) Statement -> . Write
     (9) If -> . IF BooleanFactor THEN Statements END
-    (10) If -> . IF Comparison THEN Statements ELSE Statements END
-    (13) While -> . WHILE Comparison DO Statements END
+    (10) If -> . IF BooleanFactor THEN Statements ELSE Statements END
+    (13) While -> . WHILE BooleanFactor DO Statements END
     (14) Assignment -> . Id BEC Expression
     (12) Read -> . READ Id
     (11) Write -> . WRITE Expression
@@ -201,10 +202,10 @@ state 8
 state 9
 
     (9) If -> IF . BooleanFactor THEN Statements END
-    (10) If -> IF . Comparison THEN Statements ELSE Statements END
-    (16) BooleanFactor -> . AND
-    (17) BooleanFactor -> . NOT Comparison
-    (15) Comparison -> . Expression Relation Expression
+    (10) If -> IF . BooleanFactor THEN Statements ELSE Statements END
+    (15) BooleanFactor -> . Comparison
+    (16) BooleanFactor -> . NOT BooleanFactor
+    (17) Comparison -> . Expression Relation Expression
     (24) Expression -> . Expression ADD Expression
     (25) Expression -> . Expression SUB Expression
     (26) Expression -> . Expression MUL Expression
@@ -214,21 +215,22 @@ state 9
     (30) Expression -> . Id
     (31) Id -> . ID
 
-    AND             shift and go to state 18
-    NOT             shift and go to state 19
-    LPAR            shift and go to state 21
-    NUM             shift and go to state 22
+    NOT             shift and go to state 18
+    LPAR            shift and go to state 20
+    NUM             shift and go to state 21
     ID              shift and go to state 14
 
     BooleanFactor                  shift and go to state 16
     Comparison                     shift and go to state 17
-    Expression                     shift and go to state 20
-    Id                             shift and go to state 23
+    Expression                     shift and go to state 19
+    Id                             shift and go to state 22
 
 state 10
 
-    (13) While -> WHILE . Comparison DO Statements END
-    (15) Comparison -> . Expression Relation Expression
+    (13) While -> WHILE . BooleanFactor DO Statements END
+    (15) BooleanFactor -> . Comparison
+    (16) BooleanFactor -> . NOT BooleanFactor
+    (17) Comparison -> . Expression Relation Expression
     (24) Expression -> . Expression ADD Expression
     (25) Expression -> . Expression SUB Expression
     (26) Expression -> . Expression MUL Expression
@@ -238,19 +240,21 @@ state 10
     (30) Expression -> . Id
     (31) Id -> . ID
 
-    LPAR            shift and go to state 21
-    NUM             shift and go to state 22
+    NOT             shift and go to state 18
+    LPAR            shift and go to state 20
+    NUM             shift and go to state 21
     ID              shift and go to state 14
 
-    Comparison                     shift and go to state 24
-    Expression                     shift and go to state 20
-    Id                             shift and go to state 23
+    BooleanFactor                  shift and go to state 23
+    Comparison                     shift and go to state 17
+    Expression                     shift and go to state 19
+    Id                             shift and go to state 22
 
 state 11
 
     (14) Assignment -> Id . BEC Expression
 
-    BEC             shift and go to state 25
+    BEC             shift and go to state 24
 
 
 state 12
@@ -260,7 +264,7 @@ state 12
 
     ID              shift and go to state 14
 
-    Id                             shift and go to state 26
+    Id                             shift and go to state 25
 
 state 13
 
@@ -274,12 +278,12 @@ state 13
     (30) Expression -> . Id
     (31) Id -> . ID
 
-    LPAR            shift and go to state 21
-    NUM             shift and go to state 22
+    LPAR            shift and go to state 20
+    NUM             shift and go to state 21
     ID              shift and go to state 14
 
-    Expression                     shift and go to state 27
-    Id                             shift and go to state 23
+    Expression                     shift and go to state 26
+    Id                             shift and go to state 22
 
 state 14
 
@@ -314,8 +318,8 @@ state 15
     (7) Statement -> . Read
     (8) Statement -> . Write
     (9) If -> . IF BooleanFactor THEN Statements END
-    (10) If -> . IF Comparison THEN Statements ELSE Statements END
-    (13) While -> . WHILE Comparison DO Statements END
+    (10) If -> . IF BooleanFactor THEN Statements ELSE Statements END
+    (13) While -> . WHILE BooleanFactor DO Statements END
     (14) Assignment -> . Id BEC Expression
     (12) Read -> . READ Id
     (11) Write -> . WRITE Expression
@@ -327,7 +331,7 @@ state 15
     WRITE           shift and go to state 13
     ID              shift and go to state 14
 
-    Statement                      shift and go to state 28
+    Statement                      shift and go to state 27
     If                             shift and go to state 4
     While                          shift and go to state 5
     Assignment                     shift and go to state 6
@@ -338,28 +342,25 @@ state 15
 state 16
 
     (9) If -> IF BooleanFactor . THEN Statements END
+    (10) If -> IF BooleanFactor . THEN Statements ELSE Statements END
 
-    THEN            shift and go to state 29
+    THEN            shift and go to state 28
 
 
 state 17
 
-    (10) If -> IF Comparison . THEN Statements ELSE Statements END
+    (15) BooleanFactor -> Comparison .
 
-    THEN            shift and go to state 30
+    THEN            reduce using rule 15 (BooleanFactor -> Comparison .)
+    DO              reduce using rule 15 (BooleanFactor -> Comparison .)
 
 
 state 18
 
-    (16) BooleanFactor -> AND .
-
-    THEN            reduce using rule 16 (BooleanFactor -> AND .)
-
-
-state 19
-
-    (17) BooleanFactor -> NOT . Comparison
-    (15) Comparison -> . Expression Relation Expression
+    (16) BooleanFactor -> NOT . BooleanFactor
+    (15) BooleanFactor -> . Comparison
+    (16) BooleanFactor -> . NOT BooleanFactor
+    (17) Comparison -> . Expression Relation Expression
     (24) Expression -> . Expression ADD Expression
     (25) Expression -> . Expression SUB Expression
     (26) Expression -> . Expression MUL Expression
@@ -369,17 +370,19 @@ state 19
     (30) Expression -> . Id
     (31) Id -> . ID
 
-    LPAR            shift and go to state 21
-    NUM             shift and go to state 22
+    NOT             shift and go to state 18
+    LPAR            shift and go to state 20
+    NUM             shift and go to state 21
     ID              shift and go to state 14
 
-    Comparison                     shift and go to state 31
-    Expression                     shift and go to state 20
-    Id                             shift and go to state 23
+    BooleanFactor                  shift and go to state 29
+    Comparison                     shift and go to state 17
+    Expression                     shift and go to state 19
+    Id                             shift and go to state 22
 
-state 20
+state 19
 
-    (15) Comparison -> Expression . Relation Expression
+    (17) Comparison -> Expression . Relation Expression
     (24) Expression -> Expression . ADD Expression
     (25) Expression -> Expression . SUB Expression
     (26) Expression -> Expression . MUL Expression
@@ -391,20 +394,20 @@ state 20
     (22) Relation -> . GRTR
     (23) Relation -> . GEQ
 
-    ADD             shift and go to state 33
-    SUB             shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
-    EQ              shift and go to state 37
-    NEQ             shift and go to state 38
-    LESS            shift and go to state 39
-    LEQ             shift and go to state 40
-    GRTR            shift and go to state 41
-    GEQ             shift and go to state 42
+    ADD             shift and go to state 31
+    SUB             shift and go to state 32
+    MUL             shift and go to state 33
+    DIV             shift and go to state 34
+    EQ              shift and go to state 35
+    NEQ             shift and go to state 36
+    LESS            shift and go to state 37
+    LEQ             shift and go to state 38
+    GRTR            shift and go to state 39
+    GEQ             shift and go to state 40
 
-    Relation                       shift and go to state 32
+    Relation                       shift and go to state 30
 
-state 21
+state 20
 
     (28) Expression -> LPAR . Expression RPAR
     (24) Expression -> . Expression ADD Expression
@@ -416,14 +419,14 @@ state 21
     (30) Expression -> . Id
     (31) Id -> . ID
 
-    LPAR            shift and go to state 21
-    NUM             shift and go to state 22
+    LPAR            shift and go to state 20
+    NUM             shift and go to state 21
     ID              shift and go to state 14
 
-    Expression                     shift and go to state 43
-    Id                             shift and go to state 23
+    Expression                     shift and go to state 41
+    Id                             shift and go to state 22
 
-state 22
+state 21
 
     (29) Expression -> NUM .
 
@@ -446,7 +449,7 @@ state 22
     DO              reduce using rule 29 (Expression -> NUM .)
 
 
-state 23
+state 22
 
     (30) Expression -> Id .
 
@@ -469,14 +472,14 @@ state 23
     DO              reduce using rule 30 (Expression -> Id .)
 
 
+state 23
+
+    (13) While -> WHILE BooleanFactor . DO Statements END
+
+    DO              shift and go to state 42
+
+
 state 24
-
-    (13) While -> WHILE Comparison . DO Statements END
-
-    DO              shift and go to state 44
-
-
-state 25
 
     (14) Assignment -> Id BEC . Expression
     (24) Expression -> . Expression ADD Expression
@@ -488,14 +491,14 @@ state 25
     (30) Expression -> . Id
     (31) Id -> . ID
 
-    LPAR            shift and go to state 21
-    NUM             shift and go to state 22
+    LPAR            shift and go to state 20
+    NUM             shift and go to state 21
     ID              shift and go to state 14
 
-    Id                             shift and go to state 23
-    Expression                     shift and go to state 45
+    Id                             shift and go to state 22
+    Expression                     shift and go to state 43
 
-state 26
+state 25
 
     (12) Read -> READ Id .
 
@@ -505,7 +508,7 @@ state 26
     ELSE            reduce using rule 12 (Read -> READ Id .)
 
 
-state 27
+state 26
 
     (11) Write -> WRITE Expression .
     (24) Expression -> Expression . ADD Expression
@@ -517,13 +520,13 @@ state 27
     $end            reduce using rule 11 (Write -> WRITE Expression .)
     END             reduce using rule 11 (Write -> WRITE Expression .)
     ELSE            reduce using rule 11 (Write -> WRITE Expression .)
-    ADD             shift and go to state 33
-    SUB             shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
+    ADD             shift and go to state 31
+    SUB             shift and go to state 32
+    MUL             shift and go to state 33
+    DIV             shift and go to state 34
 
 
-state 28
+state 27
 
     (3) Statements -> Statements SEM Statement .
 
@@ -533,9 +536,10 @@ state 28
     ELSE            reduce using rule 3 (Statements -> Statements SEM Statement .)
 
 
-state 29
+state 28
 
     (9) If -> IF BooleanFactor THEN . Statements END
+    (10) If -> IF BooleanFactor THEN . Statements ELSE Statements END
     (2) Statements -> . Statement
     (3) Statements -> . Statements SEM Statement
     (4) Statement -> . If
@@ -544,8 +548,8 @@ state 29
     (7) Statement -> . Read
     (8) Statement -> . Write
     (9) If -> . IF BooleanFactor THEN Statements END
-    (10) If -> . IF Comparison THEN Statements ELSE Statements END
-    (13) While -> . WHILE Comparison DO Statements END
+    (10) If -> . IF BooleanFactor THEN Statements ELSE Statements END
+    (13) While -> . WHILE BooleanFactor DO Statements END
     (14) Assignment -> . Id BEC Expression
     (12) Read -> . READ Id
     (11) Write -> . WRITE Expression
@@ -557,7 +561,7 @@ state 29
     WRITE           shift and go to state 13
     ID              shift and go to state 14
 
-    Statements                     shift and go to state 46
+    Statements                     shift and go to state 44
     Statement                      shift and go to state 3
     If                             shift and go to state 4
     While                          shift and go to state 5
@@ -565,50 +569,18 @@ state 29
     Read                           shift and go to state 7
     Write                          shift and go to state 8
     Id                             shift and go to state 11
+
+state 29
+
+    (16) BooleanFactor -> NOT BooleanFactor .
+
+    THEN            reduce using rule 16 (BooleanFactor -> NOT BooleanFactor .)
+    DO              reduce using rule 16 (BooleanFactor -> NOT BooleanFactor .)
+
 
 state 30
 
-    (10) If -> IF Comparison THEN . Statements ELSE Statements END
-    (2) Statements -> . Statement
-    (3) Statements -> . Statements SEM Statement
-    (4) Statement -> . If
-    (5) Statement -> . While
-    (6) Statement -> . Assignment
-    (7) Statement -> . Read
-    (8) Statement -> . Write
-    (9) If -> . IF BooleanFactor THEN Statements END
-    (10) If -> . IF Comparison THEN Statements ELSE Statements END
-    (13) While -> . WHILE Comparison DO Statements END
-    (14) Assignment -> . Id BEC Expression
-    (12) Read -> . READ Id
-    (11) Write -> . WRITE Expression
-    (31) Id -> . ID
-
-    IF              shift and go to state 9
-    WHILE           shift and go to state 10
-    READ            shift and go to state 12
-    WRITE           shift and go to state 13
-    ID              shift and go to state 14
-
-    Statements                     shift and go to state 47
-    Statement                      shift and go to state 3
-    If                             shift and go to state 4
-    While                          shift and go to state 5
-    Assignment                     shift and go to state 6
-    Read                           shift and go to state 7
-    Write                          shift and go to state 8
-    Id                             shift and go to state 11
-
-state 31
-
-    (17) BooleanFactor -> NOT Comparison .
-
-    THEN            reduce using rule 17 (BooleanFactor -> NOT Comparison .)
-
-
-state 32
-
-    (15) Comparison -> Expression Relation . Expression
+    (17) Comparison -> Expression Relation . Expression
     (24) Expression -> . Expression ADD Expression
     (25) Expression -> . Expression SUB Expression
     (26) Expression -> . Expression MUL Expression
@@ -618,14 +590,14 @@ state 32
     (30) Expression -> . Id
     (31) Id -> . ID
 
-    LPAR            shift and go to state 21
-    NUM             shift and go to state 22
+    LPAR            shift and go to state 20
+    NUM             shift and go to state 21
     ID              shift and go to state 14
 
-    Expression                     shift and go to state 48
-    Id                             shift and go to state 23
+    Expression                     shift and go to state 45
+    Id                             shift and go to state 22
 
-state 33
+state 31
 
     (24) Expression -> Expression ADD . Expression
     (24) Expression -> . Expression ADD Expression
@@ -637,14 +609,14 @@ state 33
     (30) Expression -> . Id
     (31) Id -> . ID
 
-    LPAR            shift and go to state 21
-    NUM             shift and go to state 22
+    LPAR            shift and go to state 20
+    NUM             shift and go to state 21
     ID              shift and go to state 14
 
-    Expression                     shift and go to state 49
-    Id                             shift and go to state 23
+    Expression                     shift and go to state 46
+    Id                             shift and go to state 22
 
-state 34
+state 32
 
     (25) Expression -> Expression SUB . Expression
     (24) Expression -> . Expression ADD Expression
@@ -656,14 +628,14 @@ state 34
     (30) Expression -> . Id
     (31) Id -> . ID
 
-    LPAR            shift and go to state 21
-    NUM             shift and go to state 22
+    LPAR            shift and go to state 20
+    NUM             shift and go to state 21
     ID              shift and go to state 14
 
-    Expression                     shift and go to state 50
-    Id                             shift and go to state 23
+    Expression                     shift and go to state 47
+    Id                             shift and go to state 22
 
-state 35
+state 33
 
     (26) Expression -> Expression MUL . Expression
     (24) Expression -> . Expression ADD Expression
@@ -675,14 +647,14 @@ state 35
     (30) Expression -> . Id
     (31) Id -> . ID
 
-    LPAR            shift and go to state 21
-    NUM             shift and go to state 22
+    LPAR            shift and go to state 20
+    NUM             shift and go to state 21
     ID              shift and go to state 14
 
-    Expression                     shift and go to state 51
-    Id                             shift and go to state 23
+    Expression                     shift and go to state 48
+    Id                             shift and go to state 22
 
-state 36
+state 34
 
     (27) Expression -> Expression DIV . Expression
     (24) Expression -> . Expression ADD Expression
@@ -694,14 +666,14 @@ state 36
     (30) Expression -> . Id
     (31) Id -> . ID
 
-    LPAR            shift and go to state 21
-    NUM             shift and go to state 22
+    LPAR            shift and go to state 20
+    NUM             shift and go to state 21
     ID              shift and go to state 14
 
-    Expression                     shift and go to state 52
-    Id                             shift and go to state 23
+    Expression                     shift and go to state 49
+    Id                             shift and go to state 22
 
-state 37
+state 35
 
     (18) Relation -> EQ .
 
@@ -710,7 +682,7 @@ state 37
     ID              reduce using rule 18 (Relation -> EQ .)
 
 
-state 38
+state 36
 
     (19) Relation -> NEQ .
 
@@ -719,7 +691,7 @@ state 38
     ID              reduce using rule 19 (Relation -> NEQ .)
 
 
-state 39
+state 37
 
     (20) Relation -> LESS .
 
@@ -728,7 +700,7 @@ state 39
     ID              reduce using rule 20 (Relation -> LESS .)
 
 
-state 40
+state 38
 
     (21) Relation -> LEQ .
 
@@ -737,7 +709,7 @@ state 40
     ID              reduce using rule 21 (Relation -> LEQ .)
 
 
-state 41
+state 39
 
     (22) Relation -> GRTR .
 
@@ -746,7 +718,7 @@ state 41
     ID              reduce using rule 22 (Relation -> GRTR .)
 
 
-state 42
+state 40
 
     (23) Relation -> GEQ .
 
@@ -755,7 +727,7 @@ state 42
     ID              reduce using rule 23 (Relation -> GEQ .)
 
 
-state 43
+state 41
 
     (28) Expression -> LPAR Expression . RPAR
     (24) Expression -> Expression . ADD Expression
@@ -763,16 +735,16 @@ state 43
     (26) Expression -> Expression . MUL Expression
     (27) Expression -> Expression . DIV Expression
 
-    RPAR            shift and go to state 53
-    ADD             shift and go to state 33
-    SUB             shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
+    RPAR            shift and go to state 50
+    ADD             shift and go to state 31
+    SUB             shift and go to state 32
+    MUL             shift and go to state 33
+    DIV             shift and go to state 34
 
 
-state 44
+state 42
 
-    (13) While -> WHILE Comparison DO . Statements END
+    (13) While -> WHILE BooleanFactor DO . Statements END
     (2) Statements -> . Statement
     (3) Statements -> . Statements SEM Statement
     (4) Statement -> . If
@@ -781,8 +753,8 @@ state 44
     (7) Statement -> . Read
     (8) Statement -> . Write
     (9) If -> . IF BooleanFactor THEN Statements END
-    (10) If -> . IF Comparison THEN Statements ELSE Statements END
-    (13) While -> . WHILE Comparison DO Statements END
+    (10) If -> . IF BooleanFactor THEN Statements ELSE Statements END
+    (13) While -> . WHILE BooleanFactor DO Statements END
     (14) Assignment -> . Id BEC Expression
     (12) Read -> . READ Id
     (11) Write -> . WRITE Expression
@@ -794,7 +766,7 @@ state 44
     WRITE           shift and go to state 13
     ID              shift and go to state 14
 
-    Statements                     shift and go to state 54
+    Statements                     shift and go to state 51
     Statement                      shift and go to state 3
     If                             shift and go to state 4
     While                          shift and go to state 5
@@ -803,7 +775,7 @@ state 44
     Write                          shift and go to state 8
     Id                             shift and go to state 11
 
-state 45
+state 43
 
     (14) Assignment -> Id BEC Expression .
     (24) Expression -> Expression . ADD Expression
@@ -815,47 +787,40 @@ state 45
     $end            reduce using rule 14 (Assignment -> Id BEC Expression .)
     END             reduce using rule 14 (Assignment -> Id BEC Expression .)
     ELSE            reduce using rule 14 (Assignment -> Id BEC Expression .)
-    ADD             shift and go to state 33
-    SUB             shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
+    ADD             shift and go to state 31
+    SUB             shift and go to state 32
+    MUL             shift and go to state 33
+    DIV             shift and go to state 34
 
 
-state 46
+state 44
 
     (9) If -> IF BooleanFactor THEN Statements . END
+    (10) If -> IF BooleanFactor THEN Statements . ELSE Statements END
     (3) Statements -> Statements . SEM Statement
 
-    END             shift and go to state 55
+    END             shift and go to state 52
+    ELSE            shift and go to state 53
     SEM             shift and go to state 15
 
 
-state 47
+state 45
 
-    (10) If -> IF Comparison THEN Statements . ELSE Statements END
-    (3) Statements -> Statements . SEM Statement
-
-    ELSE            shift and go to state 56
-    SEM             shift and go to state 15
-
-
-state 48
-
-    (15) Comparison -> Expression Relation Expression .
+    (17) Comparison -> Expression Relation Expression .
     (24) Expression -> Expression . ADD Expression
     (25) Expression -> Expression . SUB Expression
     (26) Expression -> Expression . MUL Expression
     (27) Expression -> Expression . DIV Expression
 
-    THEN            reduce using rule 15 (Comparison -> Expression Relation Expression .)
-    DO              reduce using rule 15 (Comparison -> Expression Relation Expression .)
-    ADD             shift and go to state 33
-    SUB             shift and go to state 34
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
+    THEN            reduce using rule 17 (Comparison -> Expression Relation Expression .)
+    DO              reduce using rule 17 (Comparison -> Expression Relation Expression .)
+    ADD             shift and go to state 31
+    SUB             shift and go to state 32
+    MUL             shift and go to state 33
+    DIV             shift and go to state 34
 
 
-state 49
+state 46
 
     (24) Expression -> Expression ADD Expression .
     (24) Expression -> Expression . ADD Expression
@@ -878,16 +843,16 @@ state 49
     RPAR            reduce using rule 24 (Expression -> Expression ADD Expression .)
     THEN            reduce using rule 24 (Expression -> Expression ADD Expression .)
     DO              reduce using rule 24 (Expression -> Expression ADD Expression .)
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
+    MUL             shift and go to state 33
+    DIV             shift and go to state 34
 
   ! MUL             [ reduce using rule 24 (Expression -> Expression ADD Expression .) ]
   ! DIV             [ reduce using rule 24 (Expression -> Expression ADD Expression .) ]
-  ! ADD             [ shift and go to state 33 ]
-  ! SUB             [ shift and go to state 34 ]
+  ! ADD             [ shift and go to state 31 ]
+  ! SUB             [ shift and go to state 32 ]
 
 
-state 50
+state 47
 
     (25) Expression -> Expression SUB Expression .
     (24) Expression -> Expression . ADD Expression
@@ -910,16 +875,16 @@ state 50
     RPAR            reduce using rule 25 (Expression -> Expression SUB Expression .)
     THEN            reduce using rule 25 (Expression -> Expression SUB Expression .)
     DO              reduce using rule 25 (Expression -> Expression SUB Expression .)
-    MUL             shift and go to state 35
-    DIV             shift and go to state 36
+    MUL             shift and go to state 33
+    DIV             shift and go to state 34
 
   ! MUL             [ reduce using rule 25 (Expression -> Expression SUB Expression .) ]
   ! DIV             [ reduce using rule 25 (Expression -> Expression SUB Expression .) ]
-  ! ADD             [ shift and go to state 33 ]
-  ! SUB             [ shift and go to state 34 ]
+  ! ADD             [ shift and go to state 31 ]
+  ! SUB             [ shift and go to state 32 ]
 
 
-state 51
+state 48
 
     (26) Expression -> Expression MUL Expression .
     (24) Expression -> Expression . ADD Expression
@@ -945,13 +910,13 @@ state 51
     THEN            reduce using rule 26 (Expression -> Expression MUL Expression .)
     DO              reduce using rule 26 (Expression -> Expression MUL Expression .)
 
-  ! ADD             [ shift and go to state 33 ]
-  ! SUB             [ shift and go to state 34 ]
-  ! MUL             [ shift and go to state 35 ]
-  ! DIV             [ shift and go to state 36 ]
+  ! ADD             [ shift and go to state 31 ]
+  ! SUB             [ shift and go to state 32 ]
+  ! MUL             [ shift and go to state 33 ]
+  ! DIV             [ shift and go to state 34 ]
 
 
-state 52
+state 49
 
     (27) Expression -> Expression DIV Expression .
     (24) Expression -> Expression . ADD Expression
@@ -977,13 +942,13 @@ state 52
     THEN            reduce using rule 27 (Expression -> Expression DIV Expression .)
     DO              reduce using rule 27 (Expression -> Expression DIV Expression .)
 
-  ! ADD             [ shift and go to state 33 ]
-  ! SUB             [ shift and go to state 34 ]
-  ! MUL             [ shift and go to state 35 ]
-  ! DIV             [ shift and go to state 36 ]
+  ! ADD             [ shift and go to state 31 ]
+  ! SUB             [ shift and go to state 32 ]
+  ! MUL             [ shift and go to state 33 ]
+  ! DIV             [ shift and go to state 34 ]
 
 
-state 53
+state 50
 
     (28) Expression -> LPAR Expression RPAR .
 
@@ -1006,16 +971,16 @@ state 53
     DO              reduce using rule 28 (Expression -> LPAR Expression RPAR .)
 
 
-state 54
+state 51
 
-    (13) While -> WHILE Comparison DO Statements . END
+    (13) While -> WHILE BooleanFactor DO Statements . END
     (3) Statements -> Statements . SEM Statement
 
-    END             shift and go to state 57
+    END             shift and go to state 54
     SEM             shift and go to state 15
 
 
-state 55
+state 52
 
     (9) If -> IF BooleanFactor THEN Statements END .
 
@@ -1025,9 +990,9 @@ state 55
     ELSE            reduce using rule 9 (If -> IF BooleanFactor THEN Statements END .)
 
 
-state 56
+state 53
 
-    (10) If -> IF Comparison THEN Statements ELSE . Statements END
+    (10) If -> IF BooleanFactor THEN Statements ELSE . Statements END
     (2) Statements -> . Statement
     (3) Statements -> . Statements SEM Statement
     (4) Statement -> . If
@@ -1036,8 +1001,8 @@ state 56
     (7) Statement -> . Read
     (8) Statement -> . Write
     (9) If -> . IF BooleanFactor THEN Statements END
-    (10) If -> . IF Comparison THEN Statements ELSE Statements END
-    (13) While -> . WHILE Comparison DO Statements END
+    (10) If -> . IF BooleanFactor THEN Statements ELSE Statements END
+    (13) While -> . WHILE BooleanFactor DO Statements END
     (14) Assignment -> . Id BEC Expression
     (12) Read -> . READ Id
     (11) Write -> . WRITE Expression
@@ -1049,7 +1014,7 @@ state 56
     WRITE           shift and go to state 13
     ID              shift and go to state 14
 
-    Statements                     shift and go to state 58
+    Statements                     shift and go to state 55
     Statement                      shift and go to state 3
     If                             shift and go to state 4
     While                          shift and go to state 5
@@ -1058,31 +1023,31 @@ state 56
     Write                          shift and go to state 8
     Id                             shift and go to state 11
 
-state 57
+state 54
 
-    (13) While -> WHILE Comparison DO Statements END .
+    (13) While -> WHILE BooleanFactor DO Statements END .
 
-    SEM             reduce using rule 13 (While -> WHILE Comparison DO Statements END .)
-    $end            reduce using rule 13 (While -> WHILE Comparison DO Statements END .)
-    END             reduce using rule 13 (While -> WHILE Comparison DO Statements END .)
-    ELSE            reduce using rule 13 (While -> WHILE Comparison DO Statements END .)
+    SEM             reduce using rule 13 (While -> WHILE BooleanFactor DO Statements END .)
+    $end            reduce using rule 13 (While -> WHILE BooleanFactor DO Statements END .)
+    END             reduce using rule 13 (While -> WHILE BooleanFactor DO Statements END .)
+    ELSE            reduce using rule 13 (While -> WHILE BooleanFactor DO Statements END .)
 
 
-state 58
+state 55
 
-    (10) If -> IF Comparison THEN Statements ELSE Statements . END
+    (10) If -> IF BooleanFactor THEN Statements ELSE Statements . END
     (3) Statements -> Statements . SEM Statement
 
-    END             shift and go to state 59
+    END             shift and go to state 56
     SEM             shift and go to state 15
 
 
-state 59
+state 56
 
-    (10) If -> IF Comparison THEN Statements ELSE Statements END .
+    (10) If -> IF BooleanFactor THEN Statements ELSE Statements END .
 
-    SEM             reduce using rule 10 (If -> IF Comparison THEN Statements ELSE Statements END .)
-    $end            reduce using rule 10 (If -> IF Comparison THEN Statements ELSE Statements END .)
-    END             reduce using rule 10 (If -> IF Comparison THEN Statements ELSE Statements END .)
-    ELSE            reduce using rule 10 (If -> IF Comparison THEN Statements ELSE Statements END .)
+    SEM             reduce using rule 10 (If -> IF BooleanFactor THEN Statements ELSE Statements END .)
+    $end            reduce using rule 10 (If -> IF BooleanFactor THEN Statements ELSE Statements END .)
+    END             reduce using rule 10 (If -> IF BooleanFactor THEN Statements ELSE Statements END .)
+    ELSE            reduce using rule 10 (If -> IF BooleanFactor THEN Statements ELSE Statements END .)
 

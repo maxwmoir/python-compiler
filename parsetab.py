@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftADDSUBleftMULDIVADD AND BEC DIV DO ELSE END EQ GEQ GRTR ID IF LEQ LESS LPAR MUL NEQ NOT NUM OR READ RPAR SEM SUB THEN WHILE WRITEProgram : StatementsStatements : StatementStatements : Statements SEM StatementStatement : If\n                 | While\n                 | Assignment\n                 | Read\n                 | WriteIf : IF BooleanFactor THEN Statements END\n          | IF Comparison THEN Statements ELSE Statements ENDWrite : WRITE ExpressionRead : READ IdWhile : WHILE Comparison DO Statements ENDAssignment : Id BEC ExpressionComparison : Expression Relation ExpressionBooleanFactor : AND\n                     | NOT ComparisonRelation : EQ\n                | NEQ\n                | LESS\n                | LEQ\n                | GRTR\n                | GEQExpression : Expression ADD Expression\n                  | Expression SUB Expression\n                  | Expression MUL Expression\n                  | Expression DIV ExpressionExpression : LPAR Expression RPARExpression : NUMExpression : IdId : ID'
+_lr_signature = 'leftADDSUBleftMULDIVADD AND BEC DIV DO ELSE END EQ GEQ GRTR ID IF LEQ LESS LPAR MUL NEQ NOT NUM OR READ RPAR SEM SUB THEN WHILE WRITEProgram : StatementsStatements : StatementStatements : Statements SEM StatementStatement : If\n                 | While\n                 | Assignment\n                 | Read\n                 | WriteIf : IF BooleanFactor THEN Statements END\n          | IF BooleanFactor THEN Statements ELSE Statements ENDWrite : WRITE ExpressionRead : READ IdWhile : WHILE BooleanFactor DO Statements ENDAssignment : Id BEC ExpressionBooleanFactor : Comparison\n                     | NOT BooleanFactorComparison : Expression Relation ExpressionRelation : EQ\n                | NEQ\n                | LESS\n                | LEQ\n                | GRTR\n                | GEQExpression : Expression ADD Expression\n                  | Expression SUB Expression\n                  | Expression MUL Expression\n                  | Expression DIV ExpressionExpression : LPAR Expression RPARExpression : NUMExpression : IdId : ID'
     
-_lr_action_items = {'IF':([0,15,29,30,44,56,],[9,9,9,9,9,9,]),'WHILE':([0,15,29,30,44,56,],[10,10,10,10,10,10,]),'READ':([0,15,29,30,44,56,],[12,12,12,12,12,12,]),'WRITE':([0,15,29,30,44,56,],[13,13,13,13,13,13,]),'ID':([0,9,10,12,13,15,19,21,25,29,30,32,33,34,35,36,37,38,39,40,41,42,44,56,],[14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,-18,-19,-20,-21,-22,-23,14,14,]),'$end':([1,2,3,4,5,6,7,8,14,22,23,26,27,28,45,49,50,51,52,53,55,57,59,],[0,-1,-2,-4,-5,-6,-7,-8,-31,-29,-30,-12,-11,-3,-14,-24,-25,-26,-27,-28,-9,-13,-10,]),'SEM':([2,3,4,5,6,7,8,14,22,23,26,27,28,45,46,47,49,50,51,52,53,54,55,57,58,59,],[15,-2,-4,-5,-6,-7,-8,-31,-29,-30,-12,-11,-3,-14,15,15,-24,-25,-26,-27,-28,15,-9,-13,15,-10,]),'END':([3,4,5,6,7,8,14,22,23,26,27,28,45,46,49,50,51,52,53,54,55,57,58,59,],[-2,-4,-5,-6,-7,-8,-31,-29,-30,-12,-11,-3,-14,55,-24,-25,-26,-27,-28,57,-9,-13,59,-10,]),'ELSE':([3,4,5,6,7,8,14,22,23,26,27,28,45,47,49,50,51,52,53,55,57,59,],[-2,-4,-5,-6,-7,-8,-31,-29,-30,-12,-11,-3,-14,56,-24,-25,-26,-27,-28,-9,-13,-10,]),'AND':([9,],[18,]),'NOT':([9,],[19,]),'LPAR':([9,10,13,19,21,25,32,33,34,35,36,37,38,39,40,41,42,],[21,21,21,21,21,21,21,21,21,21,21,-18,-19,-20,-21,-22,-23,]),'NUM':([9,10,13,19,21,25,32,33,34,35,36,37,38,39,40,41,42,],[22,22,22,22,22,22,22,22,22,22,22,-18,-19,-20,-21,-22,-23,]),'BEC':([11,14,],[25,-31,]),'ADD':([14,20,22,23,27,43,45,48,49,50,51,52,53,],[-31,33,-29,-30,33,33,33,33,-24,-25,-26,-27,-28,]),'SUB':([14,20,22,23,27,43,45,48,49,50,51,52,53,],[-31,34,-29,-30,34,34,34,34,-24,-25,-26,-27,-28,]),'MUL':([14,20,22,23,27,43,45,48,49,50,51,52,53,],[-31,35,-29,-30,35,35,35,35,35,35,-26,-27,-28,]),'DIV':([14,20,22,23,27,43,45,48,49,50,51,52,53,],[-31,36,-29,-30,36,36,36,36,36,36,-26,-27,-28,]),'EQ':([14,20,22,23,49,50,51,52,53,],[-31,37,-29,-30,-24,-25,-26,-27,-28,]),'NEQ':([14,20,22,23,49,50,51,52,53,],[-31,38,-29,-30,-24,-25,-26,-27,-28,]),'LESS':([14,20,22,23,49,50,51,52,53,],[-31,39,-29,-30,-24,-25,-26,-27,-28,]),'LEQ':([14,20,22,23,49,50,51,52,53,],[-31,40,-29,-30,-24,-25,-26,-27,-28,]),'GRTR':([14,20,22,23,49,50,51,52,53,],[-31,41,-29,-30,-24,-25,-26,-27,-28,]),'GEQ':([14,20,22,23,49,50,51,52,53,],[-31,42,-29,-30,-24,-25,-26,-27,-28,]),'RPAR':([14,22,23,43,49,50,51,52,53,],[-31,-29,-30,53,-24,-25,-26,-27,-28,]),'THEN':([14,16,17,18,22,23,31,48,49,50,51,52,53,],[-31,29,30,-16,-29,-30,-17,-15,-24,-25,-26,-27,-28,]),'DO':([14,22,23,24,48,49,50,51,52,53,],[-31,-29,-30,44,-15,-24,-25,-26,-27,-28,]),}
+_lr_action_items = {'IF':([0,15,28,42,53,],[9,9,9,9,9,]),'WHILE':([0,15,28,42,53,],[10,10,10,10,10,]),'READ':([0,15,28,42,53,],[12,12,12,12,12,]),'WRITE':([0,15,28,42,53,],[13,13,13,13,13,]),'ID':([0,9,10,12,13,15,18,20,24,28,30,31,32,33,34,35,36,37,38,39,40,42,53,],[14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,-18,-19,-20,-21,-22,-23,14,14,]),'$end':([1,2,3,4,5,6,7,8,14,21,22,25,26,27,43,46,47,48,49,50,52,54,56,],[0,-1,-2,-4,-5,-6,-7,-8,-31,-29,-30,-12,-11,-3,-14,-24,-25,-26,-27,-28,-9,-13,-10,]),'SEM':([2,3,4,5,6,7,8,14,21,22,25,26,27,43,44,46,47,48,49,50,51,52,54,55,56,],[15,-2,-4,-5,-6,-7,-8,-31,-29,-30,-12,-11,-3,-14,15,-24,-25,-26,-27,-28,15,-9,-13,15,-10,]),'END':([3,4,5,6,7,8,14,21,22,25,26,27,43,44,46,47,48,49,50,51,52,54,55,56,],[-2,-4,-5,-6,-7,-8,-31,-29,-30,-12,-11,-3,-14,52,-24,-25,-26,-27,-28,54,-9,-13,56,-10,]),'ELSE':([3,4,5,6,7,8,14,21,22,25,26,27,43,44,46,47,48,49,50,52,54,56,],[-2,-4,-5,-6,-7,-8,-31,-29,-30,-12,-11,-3,-14,53,-24,-25,-26,-27,-28,-9,-13,-10,]),'NOT':([9,10,18,],[18,18,18,]),'LPAR':([9,10,13,18,20,24,30,31,32,33,34,35,36,37,38,39,40,],[20,20,20,20,20,20,20,20,20,20,20,-18,-19,-20,-21,-22,-23,]),'NUM':([9,10,13,18,20,24,30,31,32,33,34,35,36,37,38,39,40,],[21,21,21,21,21,21,21,21,21,21,21,-18,-19,-20,-21,-22,-23,]),'BEC':([11,14,],[24,-31,]),'ADD':([14,19,21,22,26,41,43,45,46,47,48,49,50,],[-31,31,-29,-30,31,31,31,31,-24,-25,-26,-27,-28,]),'SUB':([14,19,21,22,26,41,43,45,46,47,48,49,50,],[-31,32,-29,-30,32,32,32,32,-24,-25,-26,-27,-28,]),'MUL':([14,19,21,22,26,41,43,45,46,47,48,49,50,],[-31,33,-29,-30,33,33,33,33,33,33,-26,-27,-28,]),'DIV':([14,19,21,22,26,41,43,45,46,47,48,49,50,],[-31,34,-29,-30,34,34,34,34,34,34,-26,-27,-28,]),'EQ':([14,19,21,22,46,47,48,49,50,],[-31,35,-29,-30,-24,-25,-26,-27,-28,]),'NEQ':([14,19,21,22,46,47,48,49,50,],[-31,36,-29,-30,-24,-25,-26,-27,-28,]),'LESS':([14,19,21,22,46,47,48,49,50,],[-31,37,-29,-30,-24,-25,-26,-27,-28,]),'LEQ':([14,19,21,22,46,47,48,49,50,],[-31,38,-29,-30,-24,-25,-26,-27,-28,]),'GRTR':([14,19,21,22,46,47,48,49,50,],[-31,39,-29,-30,-24,-25,-26,-27,-28,]),'GEQ':([14,19,21,22,46,47,48,49,50,],[-31,40,-29,-30,-24,-25,-26,-27,-28,]),'RPAR':([14,21,22,41,46,47,48,49,50,],[-31,-29,-30,50,-24,-25,-26,-27,-28,]),'THEN':([14,16,17,21,22,29,45,46,47,48,49,50,],[-31,28,-15,-29,-30,-16,-17,-24,-25,-26,-27,-28,]),'DO':([14,17,21,22,23,29,45,46,47,48,49,50,],[-31,-15,-29,-30,42,-16,-17,-24,-25,-26,-27,-28,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'Program':([0,],[1,]),'Statements':([0,29,30,44,56,],[2,46,47,54,58,]),'Statement':([0,15,29,30,44,56,],[3,28,3,3,3,3,]),'If':([0,15,29,30,44,56,],[4,4,4,4,4,4,]),'While':([0,15,29,30,44,56,],[5,5,5,5,5,5,]),'Assignment':([0,15,29,30,44,56,],[6,6,6,6,6,6,]),'Read':([0,15,29,30,44,56,],[7,7,7,7,7,7,]),'Write':([0,15,29,30,44,56,],[8,8,8,8,8,8,]),'Id':([0,9,10,12,13,15,19,21,25,29,30,32,33,34,35,36,44,56,],[11,23,23,26,23,11,23,23,23,11,11,23,23,23,23,23,11,11,]),'BooleanFactor':([9,],[16,]),'Comparison':([9,10,19,],[17,24,31,]),'Expression':([9,10,13,19,21,25,32,33,34,35,36,],[20,20,27,20,43,45,48,49,50,51,52,]),'Relation':([20,],[32,]),}
+_lr_goto_items = {'Program':([0,],[1,]),'Statements':([0,28,42,53,],[2,44,51,55,]),'Statement':([0,15,28,42,53,],[3,27,3,3,3,]),'If':([0,15,28,42,53,],[4,4,4,4,4,]),'While':([0,15,28,42,53,],[5,5,5,5,5,]),'Assignment':([0,15,28,42,53,],[6,6,6,6,6,]),'Read':([0,15,28,42,53,],[7,7,7,7,7,]),'Write':([0,15,28,42,53,],[8,8,8,8,8,]),'Id':([0,9,10,12,13,15,18,20,24,28,30,31,32,33,34,42,53,],[11,22,22,25,22,11,22,22,22,11,22,22,22,22,22,11,11,]),'BooleanFactor':([9,10,18,],[16,23,29,]),'Comparison':([9,10,18,],[17,17,17,]),'Expression':([9,10,13,18,20,24,30,31,32,33,34,],[19,19,26,19,41,43,45,46,47,48,49,]),'Relation':([19,],[30,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -36,26 +36,26 @@ _lr_productions = [
   ('Statement -> Read','Statement',1,'p_statement','ply-compiler.py',474),
   ('Statement -> Write','Statement',1,'p_statement','ply-compiler.py',475),
   ('If -> IF BooleanFactor THEN Statements END','If',5,'p_if','ply-compiler.py',479),
-  ('If -> IF Comparison THEN Statements ELSE Statements END','If',7,'p_if','ply-compiler.py',480),
+  ('If -> IF BooleanFactor THEN Statements ELSE Statements END','If',7,'p_if','ply-compiler.py',480),
   ('Write -> WRITE Expression','Write',2,'p_write','ply-compiler.py',487),
   ('Read -> READ Id','Read',2,'p_read','ply-compiler.py',491),
-  ('While -> WHILE Comparison DO Statements END','While',5,'p_while','ply-compiler.py',495),
+  ('While -> WHILE BooleanFactor DO Statements END','While',5,'p_while','ply-compiler.py',495),
   ('Assignment -> Id BEC Expression','Assignment',3,'p_assignment','ply-compiler.py',499),
-  ('Comparison -> Expression Relation Expression','Comparison',3,'p_comparison','ply-compiler.py',503),
-  ('BooleanFactor -> AND','BooleanFactor',1,'p_boolean_factor','ply-compiler.py',525),
-  ('BooleanFactor -> NOT Comparison','BooleanFactor',2,'p_boolean_factor','ply-compiler.py',526),
-  ('Relation -> EQ','Relation',1,'p_relation','ply-compiler.py',534),
-  ('Relation -> NEQ','Relation',1,'p_relation','ply-compiler.py',535),
-  ('Relation -> LESS','Relation',1,'p_relation','ply-compiler.py',536),
-  ('Relation -> LEQ','Relation',1,'p_relation','ply-compiler.py',537),
-  ('Relation -> GRTR','Relation',1,'p_relation','ply-compiler.py',538),
-  ('Relation -> GEQ','Relation',1,'p_relation','ply-compiler.py',539),
-  ('Expression -> Expression ADD Expression','Expression',3,'p_expression_binary','ply-compiler.py',543),
-  ('Expression -> Expression SUB Expression','Expression',3,'p_expression_binary','ply-compiler.py',544),
-  ('Expression -> Expression MUL Expression','Expression',3,'p_expression_binary','ply-compiler.py',545),
-  ('Expression -> Expression DIV Expression','Expression',3,'p_expression_binary','ply-compiler.py',546),
-  ('Expression -> LPAR Expression RPAR','Expression',3,'p_expression_parenthesis','ply-compiler.py',550),
-  ('Expression -> NUM','Expression',1,'p_expression_num','ply-compiler.py',554),
-  ('Expression -> Id','Expression',1,'p_expression_id','ply-compiler.py',558),
-  ('Id -> ID','Id',1,'p_id','ply-compiler.py',562),
+  ('BooleanFactor -> Comparison','BooleanFactor',1,'p_boolean_factor','ply-compiler.py',522),
+  ('BooleanFactor -> NOT BooleanFactor','BooleanFactor',2,'p_boolean_factor','ply-compiler.py',523),
+  ('Comparison -> Expression Relation Expression','Comparison',3,'p_comparison','ply-compiler.py',533),
+  ('Relation -> EQ','Relation',1,'p_relation','ply-compiler.py',537),
+  ('Relation -> NEQ','Relation',1,'p_relation','ply-compiler.py',538),
+  ('Relation -> LESS','Relation',1,'p_relation','ply-compiler.py',539),
+  ('Relation -> LEQ','Relation',1,'p_relation','ply-compiler.py',540),
+  ('Relation -> GRTR','Relation',1,'p_relation','ply-compiler.py',541),
+  ('Relation -> GEQ','Relation',1,'p_relation','ply-compiler.py',542),
+  ('Expression -> Expression ADD Expression','Expression',3,'p_expression_binary','ply-compiler.py',546),
+  ('Expression -> Expression SUB Expression','Expression',3,'p_expression_binary','ply-compiler.py',547),
+  ('Expression -> Expression MUL Expression','Expression',3,'p_expression_binary','ply-compiler.py',548),
+  ('Expression -> Expression DIV Expression','Expression',3,'p_expression_binary','ply-compiler.py',549),
+  ('Expression -> LPAR Expression RPAR','Expression',3,'p_expression_parenthesis','ply-compiler.py',553),
+  ('Expression -> NUM','Expression',1,'p_expression_num','ply-compiler.py',557),
+  ('Expression -> Id','Expression',1,'p_expression_id','ply-compiler.py',561),
+  ('Id -> ID','Id',1,'p_id','ply-compiler.py',565),
 ]

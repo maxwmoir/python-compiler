@@ -1,25 +1,17 @@
 Statements
     Assign
-        x
+        y
         0
-    If-Else
-        =
-            x
-            1
-        Statements
-            Assign
-                x
-                1
+    If
+        NOT
+            NOT
+                =
+                    x
+                    1
         Statements
             Assign
                 x
                 2
     Assign
-        y
+        x
         0
-    If
-        AND
-        Statements
-            Assign
-                x
-                2
