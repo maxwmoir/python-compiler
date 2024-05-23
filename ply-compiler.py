@@ -48,6 +48,9 @@ reserved = {
     'while': 'WHILE',
     'read': 'READ',
     'write': 'WRITE',
+    'or'   : 'OR',
+    'and'  : 'AND',
+    'not'  : 'NOT'
 }
 
 # all token types
@@ -103,6 +106,7 @@ t_NEQ = r'!='
 t_MUL = r'\*'
 t_DIV = r'/'
 t_NUM = r'[0-9]+'
+
 def t_ID(t):
     r'[a-z]+'
     t.type = reserved.get(t.value,'ID')
@@ -309,6 +313,7 @@ class Read_AST:
                'invokevirtual java/util/Scanner.nextInt()I\n' + \
                'istore ' + str(loc) + '\n'
 
+
 class Comparison_AST:
     def __init__(self, left, op, right):
         self.left = left
@@ -501,14 +506,14 @@ label_generator = Label()
 # Uncomment the following to test the scanner without the parser.
 # Show all tokens in the input.
 #
-# scanner.input(sys.stdin.read())
+scanner.input(sys.stdin.read())
 
-# for token in scanner:
-#     if token.type in ['NUM', 'ID']:
-#         print(token.type, token.value)
-#     else:
-#         print(token.type)
-# sys.exit()
+for token in scanner:
+    if token.type in ['NUM', 'ID']:
+        print(token.type, token.value)
+    else:
+        print(token.type)
+sys.exit()
 
 # Call the parser.
 
