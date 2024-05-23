@@ -1,18 +1,12 @@
-ID x
-BEC
-NUM 0
-SEM
-IF
-NOT
-ID x
-LEQ
-NUM 3
-AND
-ID x
-GEQ
-NUM 3
-DO
-ID x
-BEC
-NUM 4
-END
+Statements
+    Assign
+        x
+        0
+    If
+        =
+            x
+            2
+        Statements
+            Assign
+                x
+                5

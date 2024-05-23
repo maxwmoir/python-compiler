@@ -462,6 +462,33 @@ def p_comparison(p):
     'Comparison : Expression Relation Expression'
     p[0] = Comparison_AST(p[1], p[2], p[3])
 
+######################################### CHANGES
+
+def p_boolean_expression(p):
+    '''BooleanExpression : BooleanTerm
+                         : BooleanTerm OR BooleanTerm'''
+    if p[2] == 'or':
+        p[0] = Boolean_Expression_AST(p[1], p[2], p[3])
+    else:
+        p[0] = Boolean_Expression_AST(p[1])
+
+def p_boolean_term(p):
+    '''BooleanTerm : BooleanFactor
+                   | BooleanFactor AND BooleanFactor'''
+    if p[2] == 'and':
+        p[0] = Boolean_Term_AST(p[1], p[2], p[3])
+    else:
+        p[0] = Boolean_Term_AST(p[1])
+
+def p_boolean_factor(p):
+    '''BooleanFactor : not BooleanFactor
+                     | Comparison'''
+    if p[1] == 'not':
+        p[0] = Boolean_Factor_AST(p[1], p[2])
+    else:
+        p[0] = Boolean_Factor_AST(p[1])
+        
+#############################################Changes
 def p_relation(p):
     '''Relation : EQ
                 | NEQ
@@ -506,14 +533,14 @@ label_generator = Label()
 # Uncomment the following to test the scanner without the parser.
 # Show all tokens in the input.
 #
-scanner.input(sys.stdin.read())
+# scanner.input(sys.stdin.read())
 
-for token in scanner:
-    if token.type in ['NUM', 'ID']:
-        print(token.type, token.value)
-    else:
-        print(token.type)
-sys.exit()
+# for token in scanner:
+#     if token.type in ['NUM', 'ID']:
+#         print(token.type, token.value)
+#     else:
+#         print(token.type)
+# sys.exit()
 
 # Call the parser.
 
@@ -523,8 +550,8 @@ ast = parser.parse(sys.stdin.read(), lexer=scanner)
 # Uncomment the following to test the parser without the code generator.
 # Show the syntax tree with levels indicated by indentation.
 #
-# print(ast.indented(0), end='')
-# sys.exit()
+print(ast.indented(0), end='')
+sys.exit()
 
 # Call the code generator.
 

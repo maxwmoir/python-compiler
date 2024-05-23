@@ -1,5 +1,11 @@
 Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
+Unused terminals:
+
+    AND
+    NOT
+    OR
+
 Grammar
 
 Rule 0     S' -> Program
@@ -36,6 +42,7 @@ Rule 29    Id -> ID
 Terminals, with rules where they appear
 
 ADD                  : 22
+AND                  : 
 BEC                  : 14
 DIV                  : 25
 DO                   : 13
@@ -51,7 +58,9 @@ LESS                 : 18
 LPAR                 : 26
 MUL                  : 24
 NEQ                  : 17
+NOT                  : 
 NUM                  : 27
+OR                   : 
 READ                 : 12
 RPAR                 : 26
 SEM                  : 3

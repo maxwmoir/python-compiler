@@ -1,4 +1,4 @@
 x := 0;
-if not x <= 3 and x >= 3 do
-	x := 4
+if x = 2 then
+	x := 5
 end
