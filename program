@@ -1,6 +1,8 @@
 
-y := 0;
-if x =2 then
-  x := 2
-end;
-x := 0
+
+read a;
+read b;
+
+if a = 1 and b = 1  then
+	write 5
+end

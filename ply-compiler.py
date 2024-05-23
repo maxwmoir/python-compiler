@@ -351,6 +351,14 @@ class Boolean_Expression_AST():
             return indent(self.op, level) + \
                 self.left.indented(level+1) + \
                 self.right.indented(level+1)    
+    def false_code(self, label):
+        l3 = label_generator.next()
+        if self.op is not None:
+            return self.left.true_code(label) + \
+                   self.right.true_code(label)
+        else:
+            return self.left.false_code(label)
+
 
 class Boolean_Term_AST():
     def __init__(self, left, op = None, right = None):
@@ -364,7 +372,21 @@ class Boolean_Term_AST():
         else:
             return indent(self.op, level) + \
                 self.left.indented(level+1) + \
-                self.right.indented(level+1)    
+                self.right.indented(level+1)
+        
+    def false_code(self, label):
+        if self.op is not None:
+            return self.left.false_code(label) + \
+                   self.right.false_code(label)
+        else:
+            return self.left.false_code(label)
+        
+    def true_code(self, label):
+        if self.op is not None:
+            return self.left.true_code(label) + \
+                   self.right.true_code(label)
+        else:
+            return self.left.true_code(label)
 
 class Boolean_Factor_AST():
     def __init__(self, left, right = None):
@@ -378,12 +400,19 @@ class Boolean_Factor_AST():
                    self.right.indented(level + 1)
         else:
             return self.left.indented(level)
-    def code(self):
+        
+    def false_code(self, label):
         if self.right is not None:
-            return self.left.code()
+            return self.right.true_code(label)
         else:
-            return self.left.code()
-    
+            return self.left.false_code(label)
+        
+    def true_code(self, label):
+        if self.right is not None:
+            return self.right.false_code(label)
+        else:
+            return self.left.true_code(label) 
+
 class Expression_AST:
     def __init__(self, left, op, right):
         self.left = left
@@ -598,8 +627,8 @@ ast = parser.parse(sys.stdin.read(), lexer=scanner)
 # Uncomment the following to test the parser without the code generator.
 # Show the syntax tree with levels indicated by indentation.
 #
-print(ast.indented(0), end='')
-sys.exit()
+# print(ast.indented(0), end='')
+# sys.exit()
 
 # Call the code generator.
 
