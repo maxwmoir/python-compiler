@@ -6,7 +6,7 @@ invokenonvirtual java/lang/Object/<init>()V
 return
 .end method
 .method public static main([Ljava/lang/String;)V
-.limit locals 3
+.limit locals 6
 .limit stack 1024
 new java/util/Scanner
 dup
@@ -16,41 +16,35 @@ astore 0
 aload 0
 invokevirtual java/util/Scanner.nextInt()I
 istore 1
-iload 1
-sipush 0
-if_icmpge l1
-getstatic java/lang/System/out Ljava/io/PrintStream;
-sipush 100
-sipush 200
-isub
-invokestatic java/lang/String/valueOf(I)Ljava/lang/String;
-invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
-goto l2
-l1:
-getstatic java/lang/System/out Ljava/io/PrintStream;
-sipush 100
-invokestatic java/lang/String/valueOf(I)Ljava/lang/String;
-invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
-l2:
 sipush 0
 istore 2
-l3:
-iload 1
-sipush 0
-if_icmple l4
-iload 2
-iload 1
-iadd
-istore 2
-iload 1
 sipush 1
-isub
-istore 1
-goto l3
-l4:
-getstatic java/lang/System/out Ljava/io/PrintStream;
+istore 3
+sipush 1
+istore 4
+sipush 0
+istore 5
+l1:
+iload 5
+iload 1
+if_icmpgt l2
 iload 2
+iload 3
+iadd
+istore 4
+iload 3
+istore 2
+iload 4
+istore 3
+iload 5
+sipush 1
+iadd
+istore 5
+getstatic java/lang/System/out Ljava/io/PrintStream;
+iload 4
 invokestatic java/lang/String/valueOf(I)Ljava/lang/String;
 invokevirtual java/io/PrintStream/println(Ljava/lang/String;)V
+goto l1
+l2:
 return
 .end method

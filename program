@@ -1,12 +1,12 @@
 read n;
-if n < 0 then
-  write 100 - 200
-else
-  write 100
-end;
-sum := 0;
-while n > 0 do
-  sum := sum + n;
-  n := n - 1
-end;
-write sum 
+a := 0;
+b := 1;
+c := 1;
+count := 0;
+while count <= n do
+  c := a + b;
+  a := b;
+  b := c;
+  count := count + 1;
+  write c
+end
