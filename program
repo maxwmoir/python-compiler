@@ -2,7 +2,10 @@
 
 read a;
 read b;
+read c;
 
-if a = 1 and b = 1  then
+if a = 0 and b = 1 or a = 1 and b = 0 or not c = 1 then
 	write 5
+else
+	write 6
 end

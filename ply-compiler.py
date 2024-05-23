@@ -221,6 +221,7 @@ class If_AST:
                self.then.indented(level+1)
     def code(self):
         l1 = label_generator.next()
+
         return self.condition.false_code(l1) + \
                self.then.code() + \
                l1 + ':\n'
@@ -352,10 +353,17 @@ class Boolean_Expression_AST():
                 self.left.indented(level+1) + \
                 self.right.indented(level+1)    
     def false_code(self, label):
+        l2 = label_generator.next()
         l3 = label_generator.next()
+        l4 = label_generator.next()
+
+
         if self.op is not None:
-            return self.left.true_code(label) + \
-                   self.right.true_code(label)
+            return self.left.false_code(l2) + \
+                   'goto ' + l3 + '\n' + \
+                   l2 + ':\n' + \
+                   self.right.false_code(label) + \
+                   l3 + ':\n' 
         else:
             return self.left.false_code(label)
 
