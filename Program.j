@@ -2,11 +2,24 @@ Statements
     Assign
         x
         0
-    If
+    If-Else
         =
             x
-            2
+            1
         Statements
             Assign
                 x
-                5
+                1
+        Statements
+            Assign
+                x
+                2
+    Assign
+        y
+        0
+    If
+        AND
+        Statements
+            Assign
+                x
+                2

@@ -339,6 +339,47 @@ class Comparison_AST:
                self.right.code() + \
                op[self.op] + ' ' + label + '\n'
 
+# class Boolean_Expression_AST():
+#     def __init__(self, left, op = None, right=None):
+#         self.left = left
+#         self.op = op
+#         self.right = right
+#     def indented(self, level):
+#         if self.op is None:
+#             return indent(self.op, level) + \
+#                 self.left.indented(level+1)
+#         else:
+#             return indent(self.op, level) + \
+#                 self.left.indented(level+1) + \
+#                 self.right.indented(level+1)    
+
+# class Boolean_Term_AST():
+#     def __init__(self, left, op = None, right = None):
+#         self.left = left
+#         self.op = op
+#         self.right = right
+#     def indented(self, level):
+#         if self.op is None:
+#             return indent(self.op, level) + \
+#                 self.left.indented(level+1)
+#         else:
+#             return indent(self.op, level) + \
+#                 self.left.indented(level+1) + \
+#                 self.right.indented(level+1)    
+
+class Boolean_Factor_AST():
+    def __init__(self, left, right = None):
+        self.left = left
+        self.right = right
+    def __repr__(self):
+        return repr(self.left)
+    def indented(self, level):
+        if self.right is not None:
+            return indent("NOT", level) +\
+                   self.right.indented(level + 1)
+        else:
+            return indent("AND", level)
+    
 class Expression_AST:
     def __init__(self, left, op, right):
         self.left = left
@@ -435,7 +476,7 @@ def p_statement(p):
     p[0] = p[1]
 
 def p_if(p):
-    '''If : IF Comparison THEN Statements END
+    '''If : IF BooleanFactor THEN Statements END
           | IF Comparison THEN Statements ELSE Statements END'''
     if p[5] == 'end':
         p[0] = If_AST(p[2], p[4])
@@ -464,30 +505,31 @@ def p_comparison(p):
 
 ######################################### CHANGES
 
-def p_boolean_expression(p):
-    '''BooleanExpression : BooleanTerm
-                         : BooleanTerm OR BooleanTerm'''
-    if p[2] == 'or':
-        p[0] = Boolean_Expression_AST(p[1], p[2], p[3])
-    else:
-        p[0] = Boolean_Expression_AST(p[1])
+# def p_boolean_expression(p):
+#     '''BooleanExpression : BooleanTerm
+#                          | BooleanTerm OR BooleanExpression'''
+#     if p[2] == 'or':
+#         p[0] = Boolean_Expression_AST(p[1], p[2], p[3])
+#     else:
+#         p[0] = Boolean_Expression_AST(p[1])
 
-def p_boolean_term(p):
-    '''BooleanTerm : BooleanFactor
-                   | BooleanFactor AND BooleanFactor'''
-    if p[2] == 'and':
-        p[0] = Boolean_Term_AST(p[1], p[2], p[3])
-    else:
-        p[0] = Boolean_Term_AST(p[1])
+# def p_boolean_term(p):
+#     '''BooleanTerm : BooleanFactor
+#                    | BooleanFactor AND BooleanTerm'''
+#     if p[2] == 'and':
+#         p[0] = Boolean_Term_AST(p[1], p[2], p[3])
+#     else:
+#         p[0] = Boolean_Term_AST(p[1])
 
 def p_boolean_factor(p):
-    '''BooleanFactor : not BooleanFactor
-                     | Comparison'''
-    if p[1] == 'not':
-        p[0] = Boolean_Factor_AST(p[1], p[2])
-    else:
+    '''BooleanFactor : AND
+                     | NOT Comparison'''
+    if p[1] == 'and':
         p[0] = Boolean_Factor_AST(p[1])
-        
+    else:
+        p[0] = Boolean_Factor_AST(p[1], p[2])
+
+
 #############################################Changes
 def p_relation(p):
     '''Relation : EQ
@@ -522,7 +564,7 @@ def p_id(p):
     p[0] = Identifier_AST(p[1])
 
 def p_error(p):
-    print("syntax error")
+    print("syntax error: ", p)
     sys.exit()
 
 scanner = lex.lex()
