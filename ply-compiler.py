@@ -48,6 +48,9 @@ reserved = {
     'while': 'WHILE',
     'read': 'READ',
     'write': 'WRITE',
+    'or'   : 'OR',
+    'and'  : 'AND',
+    'not'  : 'NOT'
 }
 
 # all token types
@@ -103,6 +106,7 @@ t_NEQ = r'!='
 t_MUL = r'\*'
 t_DIV = r'/'
 t_NUM = r'[0-9]+'
+
 def t_ID(t):
     r'[a-z]+'
     t.type = reserved.get(t.value,'ID')
@@ -217,6 +221,7 @@ class If_AST:
                self.then.indented(level+1)
     def code(self):
         l1 = label_generator.next()
+
         return self.condition.false_code(l1) + \
                self.then.code() + \
                l1 + ':\n'
@@ -234,7 +239,6 @@ class If_Else_AST:
                self.condition.indented(level+1) + \
                self.then.indented(level+1) + \
                self.other.indented(level+1)
-    #TODO code
     def code(self):
         l1 = label_generator.next()
         l2 = label_generator.next()
@@ -309,6 +313,7 @@ class Read_AST:
                'invokevirtual java/util/Scanner.nextInt()I\n' + \
                'istore ' + str(loc) + '\n'
 
+
 class Comparison_AST:
     def __init__(self, left, op, right):
         self.left = left
@@ -333,6 +338,88 @@ class Comparison_AST:
         return self.left.code() + \
                self.right.code() + \
                op[self.op] + ' ' + label + '\n'
+
+class Boolean_Expression_AST():
+    def __init__(self, left, op = None, right=None):
+        self.left = left
+        self.op = op
+        self.right = right
+    def indented(self, level):
+        if self.op is None:
+            return indent(self.op, level) + \
+                self.left.indented(level+1)
+        else:
+            return indent(self.op, level) + \
+                self.left.indented(level+1) + \
+                self.right.indented(level+1)    
+    def false_code(self, label):
+        l2 = label_generator.next()
+        l3 = label_generator.next()
+        l4 = label_generator.next()
+
+
+        if self.op is not None:
+            return self.left.false_code(l2) + \
+                   'goto ' + l3 + '\n' + \
+                   l2 + ':\n' + \
+                   self.right.false_code(label) + \
+                   l3 + ':\n' 
+        else:
+            return self.left.false_code(label)
+
+
+class Boolean_Term_AST():
+    def __init__(self, left, op = None, right = None):
+        self.left = left
+        self.op = op
+        self.right = right
+    def indented(self, level):
+        if self.op is None:
+            return indent(self.op, level) + \
+                self.left.indented(level+1)
+        else:
+            return indent(self.op, level) + \
+                self.left.indented(level+1) + \
+                self.right.indented(level+1)
+        
+    def false_code(self, label):
+        if self.op is not None:
+            return self.left.false_code(label) + \
+                   self.right.false_code(label)
+        else:
+            return self.left.false_code(label)
+        
+    def true_code(self, label):
+        if self.op is not None:
+            return self.left.true_code(label) + \
+                   self.right.true_code(label)
+        else:
+            return self.left.true_code(label)
+
+class Boolean_Factor_AST():
+    def __init__(self, left, right = None):
+        self.left = left
+        self.right = right
+    def __repr__(self):
+        return repr(self.left)
+    def indented(self, level):
+        if self.right is not None:
+            return indent("NOT", level) +\
+                   self.right.indented(level + 1)
+        else:
+            return self.left.indented(level)
+        
+    def false_code(self, label):
+        if self.right is not None:
+            return self.right.true_code(label)
+        else:
+            return self.left.false_code(label)
+        
+    def true_code(self, label):
+        if self.right is not None:
+            return self.right.false_code(label)
+        else:
+            return self.left.true_code(label) 
 
 class Expression_AST:
     def __init__(self, left, op, right):
@@ -430,8 +517,8 @@ def p_statement(p):
     p[0] = p[1]
 
 def p_if(p):
-    '''If : IF Comparison THEN Statements END
-          | IF Comparison THEN Statements ELSE Statements END'''
+    '''If : IF BooleanExpression THEN Statements END
+          | IF BooleanExpression THEN Statements ELSE Statements END'''
     if p[5] == 'end':
         p[0] = If_AST(p[2], p[4])
     else:
@@ -446,12 +533,42 @@ def p_read(p):
     p[0] = Read_AST(p[2])
 
 def p_while(p):
-    'While : WHILE Comparison DO Statements END'
+    'While : WHILE BooleanExpression DO Statements END'
     p[0] = While_AST(p[2], p[4])
 
 def p_assignment(p):
     'Assignment : Id BEC Expression'
     p[0] = Assign_AST(p[1], p[3])
+
+
+######################################### CHANGES
+
+def p_boolean_expression(p):
+    '''BooleanExpression : BooleanTerm
+                         | BooleanTerm OR BooleanExpression'''
+    if len(p) > 2:
+        p[0] = Boolean_Expression_AST(p[1], p[2], p[3])
+    else:
+        p[0] = p[1]
+
+def p_boolean_term(p):
+    '''BooleanTerm : BooleanFactor
+                   | BooleanFactor AND BooleanTerm'''
+    if len(p) > 2:
+        p[0] = Boolean_Term_AST(p[1], p[2], p[3])
+    else:
+        p[0] = p[1]
+
+def p_boolean_factor(p):
+    '''BooleanFactor : Comparison
+                     | NOT BooleanFactor'''
+    if p[1] == 'not':
+        p[0] = Boolean_Factor_AST(p[1], p[2])
+    else:
+        p[0] = p[1]
+
+
+#############################################Changes
 
 def p_comparison(p):
     'Comparison : Expression Relation Expression'
@@ -490,7 +607,7 @@ def p_id(p):
     p[0] = Identifier_AST(p[1])
 
 def p_error(p):
-    print("syntax error")
+    print("syntax error: ", p)
     sys.exit()
 
 scanner = lex.lex()
