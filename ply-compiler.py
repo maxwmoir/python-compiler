@@ -1,21 +1,4 @@
 
-"""
-PLY compiler template for COSC261 Assignment
-    ## WARNING ## Your code should be derived from this template 
-                  by modifying only the parts mentioned in the requirements; 
-                  other changes are at your own risk. 
-                  Feel free, however, to experiment during the development.
-
-This program uses PLY (Python Lex-Yacc). Documentation for PLY is
-available at
-    https://www.dabeaz.com/ply/ply.html
-
-PLY can be installed on your own system using pip, which comes
-preinstalled on recent versions of Python (>= 3.4). Using pip the PLY
-package can be installed with the following command:
-    pip3 install ply
-This requires Internet access to download the package.
-"""
 
 import ply.lex as lex
 import ply.yacc as yacc
@@ -26,17 +9,6 @@ import sys
 # Stack size must not exceed 1024.
 # Integer is the only type.
 # Logical operators cannot be nested.
-
-"""
-PLY's scanner works by matching regular expressions to the tokens.
-If you need a reminder of the syntax for regular expressions, check
-the following link:
-    https://docs.python.org/3/library/re.html
-
-All tokens that the lexer can find must be declared in a list of
-strings called tokens, which contains the names of the tokens, but
-not the regular expressions matching them.
-"""
 
 # reserved words
 reserved = {
@@ -59,34 +31,6 @@ tokens = [
     'ADD', 'SUB', 'MUL', 'DIV', 'LPAR', 'RPAR', 'NUM', 'ID'
 ] + list(reserved.values())
 
-"""
-A regular expression is associated to a token as in the following
-example:
-
-    t_EXAMPLE1 = r'\+'
-
-The declared name must start with 't_' and end with the name of a
-token (an element of tokens). It is assigned a string denoting a
-regular expression. The prefix 'r' of the string is not related to
-regular expressions but specifies raw strings in Python. In raw
-strings, Python does not treat backslashes as escape sequences.
-
-By declaring a function instead of a string, an action can be
-performed after a token has been matched:
-
-    def t_EXAMPLE2(t):
-        r'\+'
-        t.type = 'ADD' # must be the name of a token
-        t.value = 'ADD' # can be any value associated with the token
-        return t
-
-In this case, the regular expression is the docstring of the
-function. The function has a single input 't', a token object with
-attributes type and value, both of which are already set. The
-attribute t.type is set to the function's name without 't_' and
-t.value is set to the string that the regular expression matched.
-These attributes can be modified if necessary, as shown above.
-"""
 
 # rules specifying regular expressions and actions
 
@@ -355,9 +299,6 @@ class Boolean_Expression_AST():
     def false_code(self, label):
         l2 = label_generator.next()
         l3 = label_generator.next()
-        l4 = label_generator.next()
-
-
         if self.op is not None:
             return self.left.false_code(l2) + \
                    'goto ' + l3 + '\n' + \
@@ -366,7 +307,17 @@ class Boolean_Expression_AST():
                    l3 + ':\n' 
         else:
             return self.left.false_code(label)
-
+    def true_code(self, label):
+        l2 = label_generator.next()
+        l3 = label_generator.next()
+        if self.op is not None:
+            return self.left.true_code(l2) + \
+                   'goto ' + l3 + '\n' + \
+                   l2 + ':\n' + \
+                   self.right.true_code(label) + \
+                   l3 + ':\n' 
+        else:
+            return self.left.true_code(label)
 
 class Boolean_Term_AST():
     def __init__(self, left, op = None, right = None):
@@ -462,32 +413,6 @@ class Identifier_AST:
 # --------------------------------------------------------------------
 #  Parser - Productions defined using the yacc library of PLY
 # --------------------------------------------------------------------
-"""
-PLYs grammars are written in BNF. Each rule has a non-terminal on the
-left-hand side and can have a mixture of non-terminals and terminals on
-the right-hand side. Terminals are the tokens produced by the scanner.
-
-PLY allows an action to be performed after a rule is reduced, as in
-the following example:
-
-    def p_rule_name(p):
-        'A : B C D'
-        p[0] = p[1] + p[2] + p[3]
-
-The function's name must start with 'p_'. The BNF rule is the docstring
-of the function. Separate the items of the BNF rule including the colon
-by a space.
-
-The parameter p of the function is a list containing the values of a
-synthesised attribute for each item in the BNF rule. In the above
-example, the attribute value of A is p[0], that of B is p[1], and so on.
-When the function is called, p[1:] will have values for the attribute
-of each item on the right-hand side of the BNF rule. The function must
-set p[0] to the attribute value of the left-hand side non-terminal.
-Values in p[1:] are determined by the parser if the corresponding item
-is a non-terminal, and are set to t.value from the scanner if the item
-is a terminal token t.
-"""
 
 precedence = (
     ('left', 'ADD', 'SUB'),
@@ -540,9 +465,6 @@ def p_assignment(p):
     'Assignment : Id BEC Expression'
     p[0] = Assign_AST(p[1], p[3])
 
-
-######################################### CHANGES
-
 def p_boolean_expression(p):
     '''BooleanExpression : BooleanTerm
                          | BooleanTerm OR BooleanExpression'''
@@ -566,9 +488,6 @@ def p_boolean_factor(p):
         p[0] = Boolean_Factor_AST(p[1], p[2])
     else:
         p[0] = p[1]
-
-
-#############################################Changes
 
 def p_comparison(p):
     'Comparison : Expression Relation Expression'
@@ -639,9 +558,5 @@ ast = parser.parse(sys.stdin.read(), lexer=scanner)
 # sys.exit()
 
 # Call the code generator.
-
-# Translate the abstract syntax tree to JVM bytecode.
-# It can be assembled to a class file by Jasmin: http://jasmin.sourceforge.net/
-
 print(ast.code(), end='')
 
